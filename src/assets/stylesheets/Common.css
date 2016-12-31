@@ -1,0 +1,12 @@
+.Center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.CenterColum {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
