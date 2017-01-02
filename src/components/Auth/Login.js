@@ -29,9 +29,16 @@ export default class Login extends Component {
             const email = this.refs.email.getValue();
             const password = this.refs.password.getValue();
             if (!email || !password) {
-                return;
+                this.setState({
+                    error: {
+                        error: true,
+                        message: 'メールアドレスとパスワードを入力してください',
+                    }
+                });
             }
-            firebaseAuth.signInWithEmailAndPassword(email, password).catch((error) => {
+            firebaseAuth.signInWithEmailAndPassword(email, password).then((user) => {
+                location.href = '/';
+            }).catch((error) => {
                 this.setState({
                     error: {
                         error: true,
@@ -39,7 +46,6 @@ export default class Login extends Component {
                     }
                 });
             });
-            this.props.loginEvent();
         };
 
         return (

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import Card from 'material-ui/Card';
+import { Card, CardHeader, CardText } from 'material-ui/Card';
 import { firebaseDbRef, firebaseAuth } from '../../utils/FirebaseUtil';
 import '../../assets/stylesheets/Common.css';
 
@@ -10,8 +10,11 @@ export default class InputDistance extends Component {
         super();
         this.state = {
             distance: 0,
-            submit: true,
+            isDisabled: true,
             userDistance: 0,
+            inputDistance: 0,
+            input: '',
+            login: false,
         };
         this.distanceRef = firebaseDbRef('distance');
         this.style = {
@@ -28,11 +31,10 @@ export default class InputDistance extends Component {
         firebaseAuth.onAuthStateChanged((user) => {
             if (user) {
                 this.userRef = firebaseDbRef(`user/${user.uid}`);
-                this.userRef.on('value', (snapshot) => {
-                    if (snapshot.val()) {
-                        this.setState({ userDistance: snapshot.val().distance });
-                    }
-                });
+                this.setState({ login: true });
+            } else {
+                this.setState({ login: false });
+                this.setState({ isDisabled: true });
             }
         });
     }
@@ -40,40 +42,58 @@ export default class InputDistance extends Component {
     render() {
         const handleValidation = (event) => {
             const value = event.target.value;
+            this.setState({ input: value });
             const distance = this.refs.distance;
+            if (!this.state.login) {
+                distance.state.errorText = '入力するにはログインしてください';
+                this.setState({ isDisabled: true });
+                return;
+            }
             if (!value) {
-                this.setState({ submit: true });
+                this.setState({ isDisabled: true });
                 return;
             }
             const number = /^(\d)+(\.(\d)*)?$/;
             if (!number.test(value)) {
                 distance.state.errorText = '半角数値を入力してください';
-                this.setState({ submit: true });
+                this.setState({ isDisabled: true });
                 return;
             }
             distance.state.errorText = '';
-            this.setState({ submit: false });
+            this.setState({ isDisabled: false });
         };
 
         const submit = () => {
-            const distance = this.refs.distance.getValue();
-            const decimalPoint = Math.pow(10, 1);
-            const calcDestance = Math.round(distance * decimalPoint) / decimalPoint;
-            this.distanceRef.update({
-                distance: this.state.distance + calcDestance,
+            const distance = parseFloat(this.refs.distance.getValue());
+            const calc = (distance) => Math.floor(distance * 10) / 10;
+            this.setState({ inputDistance: calc(this.state.inputDistance + distance) });
+            this.setState({ input: '' });
+            this.distanceRef.transaction((currentVal) => {
+                const currentDistance = currentVal.distance || 0;
+                return { distance: calc(currentDistance + distance) };
             });
-            this.userRef.update({
-                distance: this.state.userDistance + calcDestance,
+            this.userRef.transaction((currentVal) => {
+                const currentDistance = currentVal.distance || 0;
+                return {
+                    distance: calc(currentDistance + distance),
+                    name: currentVal.name,
+                    userAgent: navigator.userAgent,
+                    platform: navigator.platform,
+                };
             });
         }
 
         return (
             <div className="InputDistance">
                 <Card style={this.style.card}>
+                    <CardHeader
+                        title="何キロ走りましたか？"
+                    />
                     <div className="Center">
                         <TextField
                             floatingLabelText="半角数字で入力してください"
                             hintText="少数も入力できます"
+                            value={this.state.input}
                             required={true}
                             onChange={handleValidation}
                             ref="distance"
@@ -88,9 +108,25 @@ export default class InputDistance extends Component {
                             label='送信'
                             primary={true}
                             onTouchTap={submit}
-                            disabled={this.state.submit}
+                            disabled={this.state.isDisabled}
                         />
                     </div>
+                    {this.state.inputDistance !== 0 &&
+                        <div className="Center">
+                            <CardText>
+                                {this.state.inputDistance}km入力されました！
+                                <br />
+                                お疲れ様でした！
+                            </CardText>
+                        </div>
+                    }
+                </Card>
+                <Card style={this.style.card}>
+                    <CardText>
+                        不具合やご意見がありましたら
+                        <a href="mailto:shiva0909ken@gmail.com?subject=【栄光期間Run企画】問い合わせ">shiva0909ken@gmail.com</a>
+                        までご連絡ください
+                    </CardText>
                 </Card>
             </div>
         );

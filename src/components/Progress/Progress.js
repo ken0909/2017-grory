@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Card, CardText, CardHeader } from 'material-ui/Card';
 import LinearProgress from 'material-ui/LinearProgress';
+import { Link } from 'react-router';
 import { firebaseDbRef, firebaseAuth } from '../../utils/FirebaseUtil';
 
 export default class Progress extends Component {
@@ -9,6 +10,7 @@ export default class Progress extends Component {
         this.state = {
             distance: 0,
             name: 'ゲスト',
+            login: false,
         };
         this.ref = firebaseDbRef('distance');
         this.style = {
@@ -30,9 +32,10 @@ export default class Progress extends Component {
         });
         firebaseAuth.onAuthStateChanged((user) => {
             if (user) {
-                setTimeout(() => {
-                    this.setState({ name: user.displayName });
-                }, 1000);
+                this.setState({ name: user.displayName });
+                this.setState({ login: true });
+            } else {
+                this.setState({ login: false });
             }
         });
     }
@@ -40,6 +43,15 @@ export default class Progress extends Component {
     render() {
         return (
             <div className="Progress">
+                {!this.state.login &&
+                    <Card style={this.style.card}>
+                        <div className="Center">
+                            <CardText>
+                                <Link to="/login">ログインしてください</Link>
+                            </CardText>
+                        </div>
+                    </Card>
+                }
                 <Card style={this.style.card}>
                     <CardHeader
                         title="栄光期間2017kmラン企画！！"

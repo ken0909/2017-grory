@@ -52,7 +52,13 @@ export default class SignIn extends Component {
             if (!nameValue) {
                 nameField.state.errorText = '名前は必須です';
             }
-            firebaseAuth.createUserWithEmailAndPassword(emailValue, password1Value).catch((error) => {
+            firebaseAuth.createUserWithEmailAndPassword(emailValue, password1Value).then((user) => {
+                user.updateProfile({
+                    displayName: nameValue,
+                }).then(() => {
+                    location.href = '/';
+                });
+            }).catch((error) => {
                 this.setState({
                     error: {
                         error: true,
@@ -60,7 +66,6 @@ export default class SignIn extends Component {
                     }
                 });
             });
-            this.props.loginEvent(nameValue);
         };
 
         const emailValidation = (event) => {
@@ -161,6 +166,7 @@ export default class SignIn extends Component {
                     ref="name"
                 />
                 <div className="Center">
+
                     <RaisedButton
                         label='新規登録'
                         primary={true}
