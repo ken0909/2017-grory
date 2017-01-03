@@ -166,7 +166,6 @@ export default class SignIn extends Component {
                     ref="name"
                 />
                 <div className="Center">
-
                     <RaisedButton
                         label='新規登録'
                         primary={true}

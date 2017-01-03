@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Chip from 'material-ui/Chip';
 import { CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
 import { firebaseDbRef, firebaseAuth } from '../../utils/FirebaseUtil';
 
 export default class Menu extends Component {
@@ -38,7 +39,16 @@ export default class Menu extends Component {
         const logout = () => {
             firebaseAuth.signOut();
             location.href = '/login';
-        }
+        };
+
+        const updateUserName = () => {
+            const user = firebaseAuth.currentUser;
+            user.updateProfile({
+                displayName: this.refs.name.getValue().trim(),
+            }).then(() => {
+                this.setState({ name: user.displayName });
+            });
+        };
 
         return (
             <div className="Menu">
@@ -47,6 +57,24 @@ export default class Menu extends Component {
                         {this.state.name}さん
                     </Chip>
                 </div>
+                {!this.state.name &&
+                    <div>
+                        <TextField
+                            floatingLabelText="名前を設定"
+                            fullWidth={true}
+                            required={true}
+                            autoComplete="nickname"
+                            ref="name"
+                        />
+                        <div className="Center">
+                            <RaisedButton
+                                label='設定'
+                                primary={true}
+                                onTouchTap={updateUserName}
+                            />
+                        </div>
+                    </div>
+                }
                 <div className="Center">
                     <CardText>
                         合計距離：{this.state.distance}km
