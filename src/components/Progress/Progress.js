@@ -32,7 +32,7 @@ export default class Progress extends Component {
         });
         firebaseAuth.onAuthStateChanged((user) => {
             if (user) {
-                this.setState({ name: user.displayName });
+                this.setState({ name: user.displayName || 'ゲスト' });
                 this.setState({ login: true });
             } else {
                 this.setState({ login: false });

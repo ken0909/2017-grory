@@ -74,10 +74,11 @@ export default class InputDistance extends Component {
             });
             this.userRef.transaction((currentVal) => {
                 const currentDistance = currentVal.distance || 0;
+                const userAgent = navigator.userAgent;
                 return {
                     distance: calc(currentDistance + distance),
-                    name: currentVal.name,
-                    userAgent: navigator.userAgent,
+                    name: currentVal.name || firebaseAuth.currentUser.displayName,
+                    userAgent: userAgent.indexOf('Line') === -1 ? userAgent : currentVal.userAgent || userAgent,
                     platform: navigator.platform,
                 };
             });
@@ -97,6 +98,7 @@ export default class InputDistance extends Component {
                             required={true}
                             onChange={handleValidation}
                             ref="distance"
+                            type="number"
                         />
                         <span>
                             km
