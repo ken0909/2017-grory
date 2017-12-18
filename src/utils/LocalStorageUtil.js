@@ -1,11 +1,11 @@
-export const getLocalStorageItem = (key = '') => {
+export const getLocalStorageItem = (key = "") => {
   const ret = localStorage.getItem(key);
   if (ret) {
     return JSON.parse(ret);
   }
   return false;
 };
-export const setLocalStorage = (key = '', val = {}) => {
+export const setLocalStorage = (key = "", val = {}) => {
   try {
     const jsonStringifiedData = JSON.stringify(val);
     if (getLocalStorageItem(key) !== jsonStringifiedData) {
@@ -16,7 +16,7 @@ export const setLocalStorage = (key = '', val = {}) => {
   }
   return true;
 };
-export const addLocalStorageItem = (key = '', val = {}) => {
+export const addLocalStorageItem = (key = "", val = {}) => {
   const localStorageVal = this.get(key);
   localStorageVal.push(val);
   try {
@@ -26,7 +26,7 @@ export const addLocalStorageItem = (key = '', val = {}) => {
   }
   return true;
 };
-export const deleteLocalStorageItem = (key = '', index = null) => {
+export const deleteLocalStorageItem = (key = "", index = null) => {
   const localStorageVal = this.get(key);
   if (!index) {
     index = localStorageVal.length - 1;
@@ -34,6 +34,6 @@ export const deleteLocalStorageItem = (key = '', index = null) => {
   localStorageVal.splice(index, index);
   this.set(JSON.stringify(localStorageVal));
 };
-export const removeLocalStorageItem = (key = '') => {
+export const removeLocalStorageItem = (key = "") => {
   localStorage.removeItem(key);
 };
