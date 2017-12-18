@@ -18,7 +18,7 @@ export default class Header extends Component {
             <div className="Header">
                 <AppBar
                     title="2017 RUN!!"
-                    onLeftIconButtonTouchTap={handleToggle}
+                    onLeftIconButtonClick={handleToggle}
                 />
                 <Drawer
                     docked={false}

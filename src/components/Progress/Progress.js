@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Card, CardText, CardHeader } from 'material-ui/Card';
 import LinearProgress from 'material-ui/LinearProgress';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { firebaseDbRef, firebaseAuth } from '../../utils/FirebaseUtil';
 
 export default class Progress extends Component {

@@ -31,7 +31,7 @@ export default class SignIn extends Component {
         const submit = () => {
             const emailField = this.refs.email;
             const emailValue = emailField.getValue();
-            const emailRegex = /[\w.\-]+@[\w\-]+\.[\w.\-]+/;
+            const emailRegex = /[\w.-]+@[\w-]+\.[\w.-]+/;
             if (!emailRegex.test(emailValue)) {
                 emailField.state.errorText = 'メールアドレスの形式が正しくありません';
                 return;
@@ -56,7 +56,7 @@ export default class SignIn extends Component {
                 user.updateProfile({
                     displayName: nameValue,
                 }).then(() => {
-                    location.href = '/';
+                    window.location.href = '/';
                 });
             }).catch((error) => {
                 this.setState({

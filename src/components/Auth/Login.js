@@ -37,7 +37,7 @@ export default class Login extends Component {
                 });
             }
             firebaseAuth.signInWithEmailAndPassword(email, password).then((user) => {
-                location.href = '/';
+                window.location.href = '/';
             }).catch((error) => {
                 this.setState({
                     error: {

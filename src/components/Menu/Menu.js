@@ -38,7 +38,7 @@ export default class Menu extends Component {
     render() {
         const logout = () => {
             firebaseAuth.signOut();
-            location.href = '/login';
+            window.location.href = '/login';
         };
 
         const updateUserName = () => {
