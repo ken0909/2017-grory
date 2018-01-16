@@ -1,13 +1,10 @@
-import React from "react";
-import { Route } from "react-router-dom";
-import Root from "./containers/Root";
-import Auth from "./containers/Auth";
-import Ranking from "./containers/Ranking";
+import React from 'react';
+import Routes from './Routes';
 
-export const App = () => (
+const App = () => (
   <React.Fragment>
-    <Route exact path="/" component={Root} />
-    <Route path="/login" component={Auth} />
-    <Route path="/ranking" component={Ranking} />
+    <Routes />
   </React.Fragment>
 );
+
+export default App;

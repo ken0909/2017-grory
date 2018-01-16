@@ -1,134 +1,104 @@
-import React, { Component } from "react";
-import TextField from "material-ui/TextField";
-import RaisedButton from "material-ui/RaisedButton";
-import Chip from "material-ui/Chip";
-import { CardText } from "material-ui/Card";
-import { orange500, red500 } from "material-ui/styles/colors";
-import { firebaseAuth } from "../../utils/FirebaseUtil";
-import "../../assets/stylesheets/Common.css";
+import React from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
+import Chip from 'material-ui/Chip';
+import { CardText } from 'material-ui/Card';
+import { orange500, red500 } from 'material-ui/styles/colors';
+import { firebaseAuth } from '../../utils/FirebaseUtil';
+import * as actions from '../../modules/auth';
+import '../../assets/stylesheets/Common.css';
 
-export default class SignIn extends Component {
-  constructor() {
-    super();
-    this.state = {
-      disabledSubmit: false,
-      error: {
-        error: false,
-        message: ""
-      }
-    };
-    this.style = {
-      common: {
-        margin: "10px 0px"
-      },
-      hint: {
-        color: orange500
-      }
-    };
+const mapStateToProps = state => {
+  return { auth: state.auth };
+};
+
+const mapDispatchToProps = dispatch => {
+  return { actions: bindActionCreators(actions, dispatch) };
+};
+
+const style = {
+  common: {
+    margin: '10px 0px'
+  },
+  hint: {
+    color: orange500
   }
+};
 
-  render() {
-    const submit = () => {
-      const emailField = this.refs.email;
-      const emailValue = emailField.getValue();
-      const emailRegex = /[\w.-]+@[\w-]+\.[\w.-]+/;
-      if (!emailRegex.test(emailValue)) {
-        emailField.state.errorText = "メールアドレスの形式が正しくありません";
-        return;
-      }
-      const password1Field = this.refs.password1;
-      const password2Field = this.refs.password2;
-      const password1Value = password1Field.getValue();
-      const password2Value = password2Field.getValue();
-      if (!password1Value) {
-        password1Field.state.errorText = "パスワードは必須です";
-      } else if (!password2Value) {
-        password2Field.state.errorText = "パスワード(確認用)は必須です";
-      } else if (password1Value !== password2Value) {
-        password2Field.state.errorText = "パスワードが一致しません";
-      }
-      const nameField = this.refs.name;
-      const nameValue = nameField.getValue();
-      if (!nameValue) {
-        nameField.state.errorText = "名前は必須です";
-      }
-      firebaseAuth
-        .createUserWithEmailAndPassword(emailValue, password1Value)
-        .then(user => {
-          user
-            .updateProfile({
-              displayName: nameValue
-            })
-            .then(() => {
-              window.location.href = "/";
-            });
-        })
-        .catch(error => {
-          this.setState({
-            error: {
-              error: true,
-              message: error.message
-            }
-          });
-        });
-    };
+const SignIn = ({ onChangeAuthMode, auth, actions, history }) => {
+  const handleSubmit = e => {
+    e.preventDefault();
+    actions.signIn();
 
-    const emailValidation = event => {
-      const value = event.target.value;
-      const email = this.refs.email;
-      if (!value) {
-        email.state.errorText = "メールアドレスは必須です";
-        this.setState({ disabledSubmit: true });
-        return;
-      }
-      email.state.errorText = "";
-      this.setState({ disabledSubmit: false });
-    };
+    const emailField = this.email;
+    const email = emailField.getInputNode().value;
+    if (!/[\w.-]+@[\w-]+\.[\w.-]+/.test(email)) {
+      actions.signInFailure(
+        new TypeError('メールアドレスの形式が正しくありません')
+      );
+      return;
+    }
 
-    const password1Validation = event => {
-      const value = event.target.value;
-      const password = this.refs.password1;
-      if (!value) {
-        password.state.errorText = "パスワードは必須です";
-        this.setState({ disabledSubmit: true });
-        return;
-      }
-      const passwordRegex = /[\d|\w]{8,16}/;
-      if (!passwordRegex.test(value)) {
-        password.state.errorText = "パスワードは8~16文字の半角英数字";
-        this.setState({ disabledSubmit: true });
-        return;
-      }
-      password.state.errorText = "";
-      this.setState({ disabledSubmit: false });
-    };
+    const passwordField = this.password;
+    const confirmPasswordField = this.confirmPassword;
+    const password = passwordField.getInputNode().value;
+    const confirmPassword = confirmPasswordField.getInputNode().value;
+    if (password !== confirmPassword) {
+      actions.signInFailure(new TypeError('パスワードが一致しません'));
+      return;
+    }
 
-    const password2Validation = event => {
-      const value = event.target.value;
-      const password = this.refs.password2;
-      if (!value) {
-        password.state.errorText = "パスワード(確認用)は必須です";
-        this.setState({ disabledSubmit: true });
-        return;
-      }
-      const passwordRegex = /(\d|\w){8,16}/;
-      if (!passwordRegex.test(value)) {
-        password.state.errorText = "パスワードは8~16文字の半角英数字";
-        this.setState({ disabledSubmit: true });
-        return;
-      }
-      const password1 = this.refs.password1.getValue();
-      if (password.getValue() !== password1) {
-        password.state.errorText = "パスワードが一致しません";
-        this.setState({ disabledSubmit: true });
-        return;
-      }
-      password.state.errorText = "";
-      this.setState({ disabledSubmit: false });
-    };
+    const name = this.name.getInputNode().value;
+    firebaseAuth
+      .createUserWithEmailAndPassword(email, password)
+      .then(user => {
+        user
+          .updateProfile({
+            displayName: name
+          })
+          .then(() => {
+            actions.signInSuccess({ name: user.displayName });
+            history.push('/');
+          })
+          .catch(error => actions.signInFailure(error));
+      })
+      .catch(error => actions.signInFailure(error));
+  };
 
-    return (
-      <div className="SignIn">
+  const handleValidatePassword = e => {
+    const value = e.target.value;
+    const password = this.password;
+    if (!value) {
+      password.state.errorText = 'パスワードは必須です';
+      return;
+    }
+    if (!/[\d|\w]{8,16}/.test(value)) {
+      password.state.errorText = 'パスワードは8~16文字の半角英数字';
+      return;
+    }
+    password.state.errorText = '';
+  };
+
+  const handleValidateConfirmPassword = e => {
+    const value = e.target.value;
+    const password = this.confirmPassword;
+    if (!value) {
+      password.state.errorText = 'パスワード(確認用)は必須です';
+      return;
+    }
+    if (!/(\d|\w){8,16}/.test(value)) {
+      password.state.errorText = 'パスワードは8~16文字の半角英数字';
+      return;
+    }
+    password.state.errorText = '';
+  };
+
+  return (
+    <div className="SignIn">
+      <form onSubmit={handleSubmit}>
         <div className="Center">
           <CardText>ユーザ登録してください</CardText>
         </div>
@@ -136,62 +106,58 @@ export default class SignIn extends Component {
           floatingLabelText="メールアドレス"
           type="email"
           fullWidth={true}
-          onChange={emailValidation}
           required={true}
-          autoComplete="email"
-          ref="email"
+          ref={input => (this.email = input)}
         />
         <TextField
           floatingLabelText="パスワード"
           type="password"
           fullWidth={true}
-          onChange={password1Validation}
+          onChange={handleValidatePassword}
           required={true}
-          autoComplete="new-password"
-          ref="password1"
+          ref={input => (this.password = input)}
         />
         <TextField
           floatingLabelText="パスワード(確認用)"
           type="password"
           fullWidth={true}
-          onChange={password2Validation}
+          onChange={handleValidateConfirmPassword}
           required={true}
-          autoComplete="new-password"
-          ref="password2"
+          ref={input => (this.confirmPassword = input)}
         />
         <TextField
           floatingLabelText="名前"
           errorText="普段呼ばれている名前を登録してください"
-          errorStyle={this.style.hint}
+          errorStyle={style.hint}
           fullWidth={true}
           required={true}
-          autoComplete="nickname"
-          ref="name"
+          ref={input => (this.name = input)}
         />
         <div className="Center">
           <RaisedButton
             label="新規登録"
             primary={true}
-            onTouchTap={submit}
-            disabled={this.state.disabledSubmit}
+            onTouchTap={handleSubmit}
           />
         </div>
-        <div className="Center">
-          <Chip
-            onTouchTap={this.props.onChangeAuthMode}
-            backgroundColor={orange500}
-            style={this.style.common}
-          >
-            ログインはこちら
-          </Chip>
-        </div>
-        {this.state.error.error && (
-          <div className="CenterColum">
-            <CardText color={red500}>登録に失敗しました</CardText>
-            <CardText color={red500}>{this.state.error.message}</CardText>
-          </div>
-        )}
+      </form>
+      <div className="Center">
+        <Chip
+          onTouchTap={onChangeAuthMode}
+          backgroundColor={orange500}
+          style={style.common}
+        >
+          ログインはこちら
+        </Chip>
       </div>
-    );
-  }
-}
+      {auth.error && (
+        <div className="CenterColum">
+          <CardText color={red500}>登録に失敗しました</CardText>
+          <CardText color={red500}>{auth.message}</CardText>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SignIn));
