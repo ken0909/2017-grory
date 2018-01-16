@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { Card, CardHeader, CardText } from "material-ui/Card";
-import { Link } from "react-router-dom";
-import { firebaseDbRef } from "../../utils/FirebaseUtil";
-import "../../assets/stylesheets/Common.css";
+import React, { Component } from 'react';
+import { Card, CardHeader, CardText } from 'material-ui/Card';
+import { Link } from 'react-router-dom';
+import { firebaseDbRef } from '../../utils/FirebaseUtil';
+import '../../assets/stylesheets/Common.css';
 
 export default class Ranking extends Component {
   constructor() {
@@ -12,22 +12,22 @@ export default class Ranking extends Component {
     };
     this.style = {
       distance: {
-        fontSize: "20px"
+        fontSize: '20px'
       }
     };
   }
 
   componentDidMount() {
-    this.listenForItem(firebaseDbRef("user"));
+    this.listenForItem(firebaseDbRef('user'));
   }
 
   listenForItem(dbRef) {
-    dbRef.on("value", snapshot => {
+    dbRef.on('value', snapshot => {
       const userInfoList = [];
       snapshot.forEach(data => {
         userInfoList.push({
           distance: data.val().distance,
-          name: data.val().name || "ゲスト"
+          name: data.val().name || 'ゲスト'
         });
       });
       userInfoList.sort((prev, next) => next.distance - prev.distance);

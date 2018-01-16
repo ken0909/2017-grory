@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import AppBar from "material-ui/AppBar";
-import Drawer from "material-ui/Drawer";
-import Menu from "../Menu/Menu";
+import React, { Component } from 'react';
+import AppBar from 'material-ui/AppBar';
+import Drawer from 'material-ui/Drawer';
+import Menu from '../Menu/Menu';
 
 export default class Header extends Component {
   constructor() {

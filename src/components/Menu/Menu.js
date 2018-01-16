@@ -1,16 +1,16 @@
-import React, { Component } from "react";
-import Chip from "material-ui/Chip";
-import { CardText } from "material-ui/Card";
-import RaisedButton from "material-ui/RaisedButton";
-import TextField from "material-ui/TextField";
-import { firebaseDbRef, firebaseAuth } from "../../utils/FirebaseUtil";
+import React, { Component } from 'react';
+import Chip from 'material-ui/Chip';
+import { CardText } from 'material-ui/Card';
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
+import { firebaseDbRef, firebaseAuth } from '../../utils/FirebaseUtil';
 
 export default class Menu extends Component {
   constructor() {
     super();
     this.state = {
       distance: 0,
-      name: "ゲスト"
+      name: 'ゲスト'
     };
   }
 
@@ -18,7 +18,7 @@ export default class Menu extends Component {
     firebaseAuth.onAuthStateChanged(user => {
       if (user) {
         const ref = firebaseDbRef(`user/${user.uid}`);
-        ref.on("value", snapshot => {
+        ref.on('value', snapshot => {
           if (snapshot.val()) {
             this.setState({ distance: snapshot.val().distance });
           } else {
@@ -38,7 +38,7 @@ export default class Menu extends Component {
   render() {
     const logout = () => {
       firebaseAuth.signOut();
-      window.location.href = "/login";
+      window.location.href = '/login';
     };
 
     const updateUserName = () => {

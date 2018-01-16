@@ -1,38 +1,38 @@
-import React, { Component } from "react";
-import { Card, CardText, CardHeader } from "material-ui/Card";
-import LinearProgress from "material-ui/LinearProgress";
-import { Link } from "react-router-dom";
-import { firebaseDbRef, firebaseAuth } from "../../utils/FirebaseUtil";
+import React, { Component } from 'react';
+import { Card, CardText, CardHeader } from 'material-ui/Card';
+import LinearProgress from 'material-ui/LinearProgress';
+import { Link } from 'react-router-dom';
+import { firebaseDbRef, firebaseAuth } from '../../utils/FirebaseUtil';
 
 export default class Progress extends Component {
   constructor() {
     super();
     this.state = {
       distance: 0,
-      name: "ゲスト",
+      name: 'ゲスト',
       login: false
     };
-    this.ref = firebaseDbRef("distance");
+    this.ref = firebaseDbRef('distance');
     this.style = {
       card: {
-        margin: "10px 0px"
+        margin: '10px 0px'
       },
       progress: {
-        height: "20px"
+        height: '20px'
       },
       distance: {
-        fontSize: "32px"
+        fontSize: '32px'
       }
     };
   }
 
   componentDidMount() {
-    this.ref.on("value", snapshot => {
+    this.ref.on('value', snapshot => {
       this.setState({ distance: snapshot.val().distance });
     });
     firebaseAuth.onAuthStateChanged(user => {
       if (user) {
-        this.setState({ name: user.displayName || "ゲスト" });
+        this.setState({ name: user.displayName || 'ゲスト' });
         this.setState({ login: true });
       } else {
         this.setState({ login: false });

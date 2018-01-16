@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import TextField from "material-ui/TextField";
-import RaisedButton from "material-ui/RaisedButton";
-import { Card, CardHeader, CardText } from "material-ui/Card";
-import { firebaseDbRef, firebaseAuth } from "../../utils/FirebaseUtil";
-import "../../assets/stylesheets/Common.css";
+import React, { Component } from 'react';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
+import { Card, CardHeader, CardText } from 'material-ui/Card';
+import { firebaseDbRef, firebaseAuth } from '../../utils/FirebaseUtil';
+import '../../assets/stylesheets/Common.css';
 
 export default class InputDistance extends Component {
   constructor() {
@@ -13,19 +13,19 @@ export default class InputDistance extends Component {
       isDisabled: true,
       userDistance: 0,
       inputDistance: 0,
-      input: "",
+      input: '',
       login: false
     };
-    this.distanceRef = firebaseDbRef("distance");
+    this.distanceRef = firebaseDbRef('distance');
     this.style = {
       card: {
-        margin: "10px 0px"
+        margin: '10px 0px'
       }
     };
   }
 
   componentDidMount() {
-    this.distanceRef.on("value", snapshot => {
+    this.distanceRef.on('value', snapshot => {
       this.setState({ distance: snapshot.val().distance });
     });
     firebaseAuth.onAuthStateChanged(user => {
@@ -45,7 +45,7 @@ export default class InputDistance extends Component {
       this.setState({ input: value });
       const distance = this.refs.distance;
       if (!this.state.login) {
-        distance.state.errorText = "入力するにはログインしてください";
+        distance.state.errorText = '入力するにはログインしてください';
         this.setState({ isDisabled: true });
         return;
       }
@@ -55,11 +55,11 @@ export default class InputDistance extends Component {
       }
       const number = /^(\d)+(\.(\d)*)?$/;
       if (!number.test(value)) {
-        distance.state.errorText = "半角数値を入力してください";
+        distance.state.errorText = '半角数値を入力してください';
         this.setState({ isDisabled: true });
         return;
       }
-      distance.state.errorText = "";
+      distance.state.errorText = '';
       this.setState({ isDisabled: false });
     };
 
@@ -69,7 +69,7 @@ export default class InputDistance extends Component {
       this.setState({
         inputDistance: calc(this.state.inputDistance + distance)
       });
-      this.setState({ input: "" });
+      this.setState({ input: '' });
       this.distanceRef.transaction(currentVal => {
         const currentDistance = currentVal.distance || 0;
         return { distance: calc(currentDistance + distance) };
@@ -81,7 +81,7 @@ export default class InputDistance extends Component {
           distance: calc(currentDistance + distance),
           name: currentVal.name || firebaseAuth.currentUser.displayName,
           userAgent:
-            userAgent.indexOf("Line") === -1
+            userAgent.indexOf('Line') === -1
               ? userAgent
               : currentVal.userAgent || userAgent,
           platform: navigator.platform
