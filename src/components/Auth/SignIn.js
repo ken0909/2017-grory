@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Chip from 'material-ui/Chip';
+import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
 import { CardText } from 'material-ui/Card';
 import { orange500, red500 } from 'material-ui/styles/colors';
 import { firebaseAuth } from '../../utils/FirebaseUtil';
@@ -98,58 +99,66 @@ const SignIn = ({ onChangeAuthMode, auth, actions, history }) => {
 
   return (
     <div className="SignIn">
-      <form onSubmit={handleSubmit}>
-        <div className="Center">
-          <CardText>ユーザ登録してください</CardText>
-        </div>
-        <TextField
-          floatingLabelText="メールアドレス"
-          type="email"
-          fullWidth={true}
-          required={true}
-          ref={input => (this.email = input)}
-        />
-        <TextField
-          floatingLabelText="パスワード"
-          type="password"
-          fullWidth={true}
-          onChange={handleValidatePassword}
-          required={true}
-          ref={input => (this.password = input)}
-        />
-        <TextField
-          floatingLabelText="パスワード(確認用)"
-          type="password"
-          fullWidth={true}
-          onChange={handleValidateConfirmPassword}
-          required={true}
-          ref={input => (this.confirmPassword = input)}
-        />
-        <TextField
-          floatingLabelText="名前"
-          errorText="普段呼ばれている名前を登録してください"
-          errorStyle={style.hint}
-          fullWidth={true}
-          required={true}
-          ref={input => (this.name = input)}
-        />
-        <div className="Center">
-          <RaisedButton
-            label="新規登録"
-            primary={true}
-            onTouchTap={handleSubmit}
-          />
-        </div>
-      </form>
       <div className="Center">
-        <Chip
-          onTouchTap={onChangeAuthMode}
-          backgroundColor={orange500}
-          style={style.common}
-        >
-          ログインはこちら
-        </Chip>
+        <CardText>ユーザ登録してください</CardText>
       </div>
+      {auth.isLoading ? (
+        <div className="Center">
+          <CircularProgress />
+        </div>
+      ) : (
+        <React.Fragment>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              floatingLabelText="メールアドレス"
+              type="email"
+              fullWidth={true}
+              required={true}
+              ref={input => (this.email = input)}
+              />
+            <TextField
+              floatingLabelText="パスワード"
+              type="password"
+              fullWidth={true}
+              onChange={handleValidatePassword}
+              required={true}
+              ref={input => (this.password = input)}
+              />
+            <TextField
+              floatingLabelText="パスワード(確認用)"
+              type="password"
+              fullWidth={true}
+              onChange={handleValidateConfirmPassword}
+              required={true}
+              ref={input => (this.confirmPassword = input)}
+              />
+            <TextField
+              floatingLabelText="名前"
+              errorText="普段呼ばれている名前を登録してください"
+              errorStyle={style.hint}
+              fullWidth={true}
+              required={true}
+              ref={input => (this.name = input)}
+              />
+            <div className="Center">
+              <RaisedButton
+                label="新規登録"
+                primary={true}
+                onTouchTap={handleSubmit}
+                />
+            </div>
+          </form>
+          <div className="Center">
+            <Chip
+              onTouchTap={onChangeAuthMode}
+              backgroundColor={orange500}
+              style={style.common}
+              >
+              ログインはこちら
+            </Chip>
+          </div>
+        </React.Fragment>
+      )}
       {auth.error && (
         <div className="CenterColum">
           <CardText color={red500}>登録に失敗しました</CardText>

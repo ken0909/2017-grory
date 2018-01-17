@@ -1,7 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
 
-const SWITCH_SIGN_IN = 'SWITCH_SIGN_IN';
-const SWITCH_LOG_IN = 'SWITCH_LOG_IN';
+const TOGGLE_AUTH = 'TOGGLE_AUTH';
 const SIGN_IN = 'SIGN_IN';
 const SIGN_IN_SUCCESS = 'SIGN_IN_SUCCESS';
 const SIGN_IN_FAILURE = 'SIGN_IN_FAILURE';
@@ -9,8 +8,7 @@ const LOG_IN = 'LOG_IN';
 const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
 const LOG_IN_FAILURE = 'LOG_IN_FAILURE';
 
-export const switchSignIn = createAction(SWITCH_SIGN_IN);
-export const switchLogIn = createAction(SWITCH_LOG_IN);
+export const toggleAuth = createAction(TOGGLE_AUTH)
 export const signIn = createAction(SIGN_IN);
 export const signInSuccess = createAction(SIGN_IN_SUCCESS);
 export const signInFailure = createAction(SIGN_IN_FAILURE);
@@ -29,11 +27,7 @@ const initialState = {
 
 export default handleActions(
   {
-    [SWITCH_SIGN_IN]: state => ({
-      ...state,
-      logInMode: !state.logInMode
-    }),
-    [SWITCH_LOG_IN]: state => ({
+    [TOGGLE_AUTH]: state => ({
       ...state,
       logInMode: !state.logInMode
     }),
