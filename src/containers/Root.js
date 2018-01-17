@@ -6,11 +6,11 @@ import Progress from '../components/Progress/Progress';
 
 const Root = () => (
   <MuiThemeProvider>
-    <div className="Root">
+    <React.Fragment>
       <Header />
       <Progress />
       <InputDistance />
-    </div>
+    </React.Fragment>
   </MuiThemeProvider>
 );
 

@@ -1,31 +1,31 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from "react-redux";
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import Menu from '../Menu/Menu';
+import * as actions from "../../modules/app";
 
-export default class Header extends Component {
-  constructor() {
-    super();
-    this.state = {
-      open: false
-    };
-  }
+const mapStateToProps = state => ({
+  app: state.app
+})
 
-  render() {
-    const handleToggle = () => this.setState({ open: !this.state.open });
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(actions, dispatch)
+})
 
-    return (
-      <div className="Header">
-        <AppBar title="2017 RUN!!" onLeftIconButtonClick={handleToggle} />
-        <Drawer
-          docked={false}
-          width={200}
-          open={this.state.open}
-          onRequestChange={open => this.setState({ open })}
-        >
-          <Menu />
-        </Drawer>
-      </div>
-    );
-  }
-}
+const Header = ({ app, actions }) => (
+  <React.Fragment>
+    <AppBar title="2017 RUN!!" onLeftIconButtonClick={actions.toggleMenu} />
+    <Drawer
+      docked={false}
+      width={200}
+      open={app.menuOpen}
+      onRequestChange={open => actions.toggleMenu({ menuOpen: open })}
+    >
+      <Menu />
+    </Drawer>
+  </React.Fragment>
+)
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header)

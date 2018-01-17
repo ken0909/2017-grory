@@ -1,21 +1,24 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from "react-redux";
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import { firebaseDbRef, firebaseAuth } from '../../utils/FirebaseUtil';
 import '../../assets/stylesheets/Common.css';
+import * as actions from "../../modules/distance";
 
-export default class InputDistance extends Component {
+const mapStateToProps = state => ({
+  distance: state.distance
+})
+
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(actions, dispatch)
+})
+
+class InputDistance extends React.Component {
   constructor() {
     super();
-    this.state = {
-      distance: 0,
-      isDisabled: true,
-      userDistance: 0,
-      inputDistance: 0,
-      input: '',
-      login: false
-    };
     this.distanceRef = firebaseDbRef('distance');
     this.style = {
       card: {
@@ -25,70 +28,51 @@ export default class InputDistance extends Component {
   }
 
   componentDidMount() {
-    this.distanceRef.on('value', snapshot => {
-      this.setState({ distance: snapshot.val().distance });
-    });
+    this.distanceRef.on('value', snapshot => this.props.actions.setDistance({ distance: snapshot.val().distance }));
     firebaseAuth.onAuthStateChanged(user => {
       if (user) {
         this.userRef = firebaseDbRef(`user/${user.uid}`);
-        this.setState({ login: true });
-      } else {
-        this.setState({ login: false });
-        this.setState({ isDisabled: true });
+        this.userRef.on('value', snapshot => this.props.actions.setUserDistance({ distance: snapshot.val().distance }))
       }
     });
   }
 
+  handleValidation(e) {
+    const value = e.target.value;
+    const distance = this.distance;
+    if (!/^(\d)+(\.(\d)*)?$/.test(value)) {
+      distance.state.errorText = '半角数値を入力してください';
+      return;
+    }
+    distance.state.errorText = '';
+  }
+
+  calc(distance) {
+    return Math.floor(distance * 10) / 10;
+  }
+
+  handleSubmit() {
+    const distance = parseFloat(this.distance.getInputNode().value);
+    this.props.actions.increaseDistance(distance)
+
+    this.distanceRef.transaction(currentVal => {
+      const currentDistance = currentVal.distance || 0;
+      return { distance: this.calc(currentDistance + distance) };
+    });
+    this.userRef.transaction(currentVal => {
+      const currentDistance = currentVal.distance || 0;
+      return {
+        distance: this.calc(currentDistance + distance),
+        name: currentVal.name || firebaseAuth.currentUser.displayName,
+        userAgent: navigator.userAgent,
+        platform: navigator.platform
+      };
+    });
+
+    this.distance.getInputNode().value = 0
+  }
+
   render() {
-    const handleValidation = event => {
-      const value = event.target.value;
-      this.setState({ input: value });
-      const distance = this.refs.distance;
-      if (!this.state.login) {
-        distance.state.errorText = '入力するにはログインしてください';
-        this.setState({ isDisabled: true });
-        return;
-      }
-      if (!value) {
-        this.setState({ isDisabled: true });
-        return;
-      }
-      const number = /^(\d)+(\.(\d)*)?$/;
-      if (!number.test(value)) {
-        distance.state.errorText = '半角数値を入力してください';
-        this.setState({ isDisabled: true });
-        return;
-      }
-      distance.state.errorText = '';
-      this.setState({ isDisabled: false });
-    };
-
-    const submit = () => {
-      const distance = parseFloat(this.refs.distance.getValue());
-      const calc = distance => Math.floor(distance * 10) / 10;
-      this.setState({
-        inputDistance: calc(this.state.inputDistance + distance)
-      });
-      this.setState({ input: '' });
-      this.distanceRef.transaction(currentVal => {
-        const currentDistance = currentVal.distance || 0;
-        return { distance: calc(currentDistance + distance) };
-      });
-      this.userRef.transaction(currentVal => {
-        const currentDistance = currentVal.distance || 0;
-        const userAgent = navigator.userAgent;
-        return {
-          distance: calc(currentDistance + distance),
-          name: currentVal.name || firebaseAuth.currentUser.displayName,
-          userAgent:
-            userAgent.indexOf('Line') === -1
-              ? userAgent
-              : currentVal.userAgent || userAgent,
-          platform: navigator.platform
-        };
-      });
-    };
-
     return (
       <div className="InputDistance">
         <Card style={this.style.card}>
@@ -97,10 +81,9 @@ export default class InputDistance extends Component {
             <TextField
               floatingLabelText="半角数字で入力してください"
               hintText="少数も入力できます"
-              value={this.state.input}
               required={true}
-              onChange={handleValidation}
-              ref="distance"
+              onChange={this.handleValidation}
+              ref={input => this.distance = input}
               type="number"
             />
             <span>km</span>
@@ -110,11 +93,10 @@ export default class InputDistance extends Component {
             <RaisedButton
               label="送信"
               primary={true}
-              onTouchTap={submit}
-              disabled={this.state.isDisabled}
+              onTouchTap={this.handleSubmit}
             />
           </div>
-          {this.state.inputDistance !== 0 && (
+          {/* {this.state.inputDistance !== 0 && (
             <div className="Center">
               <CardText>
                 {this.state.inputDistance}km入力されました！
@@ -122,7 +104,7 @@ export default class InputDistance extends Component {
                 お疲れ様でした！
               </CardText>
             </div>
-          )}
+          )} */}
         </Card>
         <Card style={this.style.card}>
           <CardText>
@@ -137,3 +119,5 @@ export default class InputDistance extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(InputDistance)
