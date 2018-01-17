@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import Chip from 'material-ui/Chip';
 import { CardText } from 'material-ui/Card';
@@ -9,13 +9,13 @@ import { firebaseAuth } from '../../utils/FirebaseUtil';
 const mapStateToProps = state => ({
   auth: state.auth,
   distance: state.distance
-})
+});
 
 const Menu = ({ auth, distance, history }) => {
   const logout = () => {
     firebaseAuth.signOut();
-    history.push('/login')
-  }
+    history.push('/login');
+  };
 
   return (
     <div className="Menu">
@@ -32,6 +32,6 @@ const Menu = ({ auth, distance, history }) => {
       )}
     </div>
   );
-}
+};
 
-export default withRouter(connect(mapStateToProps)(Menu))
+export default withRouter(connect(mapStateToProps)(Menu));

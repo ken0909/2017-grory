@@ -115,7 +115,7 @@ const SignIn = ({ onChangeAuthMode, auth, actions, history }) => {
               fullWidth={true}
               required={true}
               ref={input => (this.email = input)}
-              />
+            />
             <TextField
               floatingLabelText="パスワード"
               type="password"
@@ -123,7 +123,7 @@ const SignIn = ({ onChangeAuthMode, auth, actions, history }) => {
               onChange={handleValidatePassword}
               required={true}
               ref={input => (this.password = input)}
-              />
+            />
             <TextField
               floatingLabelText="パスワード(確認用)"
               type="password"
@@ -131,7 +131,7 @@ const SignIn = ({ onChangeAuthMode, auth, actions, history }) => {
               onChange={handleValidateConfirmPassword}
               required={true}
               ref={input => (this.confirmPassword = input)}
-              />
+            />
             <TextField
               floatingLabelText="名前"
               errorText="普段呼ばれている名前を登録してください"
@@ -139,13 +139,13 @@ const SignIn = ({ onChangeAuthMode, auth, actions, history }) => {
               fullWidth={true}
               required={true}
               ref={input => (this.name = input)}
-              />
+            />
             <div className="Center">
               <RaisedButton
                 label="新規登録"
                 primary={true}
                 onTouchTap={handleSubmit}
-                />
+              />
             </div>
           </form>
           <div className="Center">
@@ -153,7 +153,7 @@ const SignIn = ({ onChangeAuthMode, auth, actions, history }) => {
               onTouchTap={onChangeAuthMode}
               backgroundColor={orange500}
               style={style.common}
-              >
+            >
               ログインはこちら
             </Chip>
           </div>

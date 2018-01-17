@@ -1,18 +1,18 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import Menu from '../Menu/Menu';
-import * as actions from "../../modules/app";
+import * as actions from '../../modules/app';
 
 const mapStateToProps = state => ({
   app: state.app
-})
+});
 
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators(actions, dispatch)
-})
+});
 
 const Header = ({ app, actions }) => (
   <React.Fragment>
@@ -26,6 +26,6 @@ const Header = ({ app, actions }) => (
       <Menu />
     </Drawer>
   </React.Fragment>
-)
+);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header)
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

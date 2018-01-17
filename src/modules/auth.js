@@ -8,7 +8,7 @@ const LOG_IN = 'LOG_IN';
 const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
 const LOG_IN_FAILURE = 'LOG_IN_FAILURE';
 
-export const toggleAuth = createAction(TOGGLE_AUTH)
+export const toggleAuth = createAction(TOGGLE_AUTH);
 export const signIn = createAction(SIGN_IN);
 export const signInSuccess = createAction(SIGN_IN_SUCCESS);
 export const signInFailure = createAction(SIGN_IN_FAILURE);

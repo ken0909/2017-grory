@@ -1,20 +1,20 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import { firebaseDbRef, firebaseAuth } from '../../utils/FirebaseUtil';
 import '../../assets/stylesheets/Common.css';
-import * as actions from "../../modules/distance";
+import * as actions from '../../modules/distance';
 
 const mapStateToProps = state => ({
   distance: state.distance
-})
+});
 
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators(actions, dispatch)
-})
+});
 
 class InputDistance extends React.Component {
   constructor() {
@@ -28,11 +28,17 @@ class InputDistance extends React.Component {
   }
 
   componentDidMount() {
-    this.distanceRef.on('value', snapshot => this.props.actions.setDistance({ distance: snapshot.val().distance }));
+    this.distanceRef.on('value', snapshot =>
+      this.props.actions.setDistance({ distance: snapshot.val().distance })
+    );
     firebaseAuth.onAuthStateChanged(user => {
       if (user) {
         this.userRef = firebaseDbRef(`user/${user.uid}`);
-        this.userRef.on('value', snapshot => this.props.actions.setUserDistance({ distance: snapshot.val().distance }))
+        this.userRef.on('value', snapshot =>
+          this.props.actions.setUserDistance({
+            distance: snapshot.val().distance
+          })
+        );
       }
     });
   }
@@ -53,7 +59,7 @@ class InputDistance extends React.Component {
 
   handleSubmit() {
     const distance = parseFloat(this.distance.getInputNode().value);
-    this.props.actions.increaseDistance(distance)
+    this.props.actions.increaseDistance(distance);
 
     this.distanceRef.transaction(currentVal => {
       const currentDistance = currentVal.distance || 0;
@@ -69,7 +75,7 @@ class InputDistance extends React.Component {
       };
     });
 
-    this.distance.getInputNode().value = 0
+    this.distance.getInputNode().value = 0;
   }
 
   render() {
@@ -83,7 +89,7 @@ class InputDistance extends React.Component {
               hintText="少数も入力できます"
               required={true}
               onChange={this.handleValidation}
-              ref={input => this.distance = input}
+              ref={input => (this.distance = input)}
               type="number"
             />
             <span>km</span>
@@ -120,4 +126,4 @@ class InputDistance extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(InputDistance)
+export default connect(mapStateToProps, mapDispatchToProps)(InputDistance);

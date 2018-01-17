@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import { Card, CardText, CardHeader } from 'material-ui/Card';
 import LinearProgress from 'material-ui/LinearProgress';
 import { Link } from 'react-router-dom';
@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 const mapStateToProps = state => ({
   auth: state.auth,
   distance: state.distance
-})
+});
 
 const style = {
   card: {
@@ -55,6 +55,6 @@ const Progress = ({ auth, distance }) => (
       />
     </Card>
   </div>
-)
+);
 
-export default connect(mapStateToProps)(Progress)
+export default connect(mapStateToProps)(Progress);
