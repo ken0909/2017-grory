@@ -2,8 +2,8 @@ import React from 'react';
 import { render } from 'react-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { Provider } from 'react-redux';
-import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-import { routerReducer } from 'react-router-redux';
+import { createStore, combineReducers, compose } from 'redux';
+import { routerReducer as routing } from 'react-router-redux';
 import App from './App';
 import auth from './modules/auth';
 import app from './modules/app';
@@ -21,10 +21,9 @@ const store = createStore(
     app,
     auth,
     distance,
-    routing: routerReducer
+    routing
   }),
   composeEnhancers()
-  // applyMiddleware(),
 );
 
 render(
