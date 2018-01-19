@@ -1,17 +1,19 @@
 import React from 'react';
-import { Route, BrowserRouter, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
+import { ConnectedRouter } from "react-router-redux";
 import Root from './containers/Root';
 import Auth from './containers/Auth';
 import Ranking from './containers/Ranking';
+import { history } from './store';
 
 const Routes = () => (
-  <BrowserRouter>
+  <ConnectedRouter history={history}>
     <Switch>
       <Route exact path="/" component={Root} />
       <Route path="/login" component={Auth} />
       <Route path="/ranking" component={Ranking} />
     </Switch>
-  </BrowserRouter>
+  </ConnectedRouter>
 );
 
 export default Routes;

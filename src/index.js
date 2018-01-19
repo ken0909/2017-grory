@@ -2,33 +2,14 @@ import React from 'react';
 import { render } from 'react-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { Provider } from 'react-redux';
-import { createStore, combineReducers, compose } from 'redux';
-import { routerReducer as routing } from 'react-router-redux';
-import App from './App';
-import auth from './modules/auth';
-import app from './modules/app';
-import distance from './modules/distance';
+import store from "./store";
+import Routes from "./Routes";
 
 injectTapEventPlugin();
 
-const composeEnhancers =
-  process.env.NODE_ENV !== 'production'
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
-    : compose;
-
-const store = createStore(
-  combineReducers({
-    app,
-    auth,
-    distance,
-    routing
-  }),
-  composeEnhancers()
-);
-
 render(
   <Provider store={store}>
-    <App />
+    <Routes />
   </Provider>,
   document.getElementById('app')
 );
