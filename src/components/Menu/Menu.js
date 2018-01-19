@@ -1,23 +1,22 @@
 import React from 'react';
+import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import Chip from 'material-ui/Chip';
 import { CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
-import { firebaseAuth } from '../../utils/FirebaseUtil';
+import * as actions from "../../modules/auth";
 
 const mapStateToProps = state => ({
   auth: state.auth,
   distance: state.distance
 });
 
-const Menu = ({ auth, distance, history }) => {
-  const logout = () => {
-    firebaseAuth.signOut();
-    history.push('/login');
-  };
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(actions, dispatch)
+})
 
-  return (
+const Menu = ({ auth, actions, distance, history }) => (
     <div className="Menu">
       <div className="Center">
         <Chip>{auth.name}さん</Chip>
@@ -27,11 +26,10 @@ const Menu = ({ auth, distance, history }) => {
       </div>
       {auth.isLogIn && (
         <div className="Center">
-          <RaisedButton label="ログアウト" primary={true} onTouchTap={logout} />
+          <RaisedButton label="ログアウト" primary={true} onTouchTap={actions.logOut} />
         </div>
       )}
     </div>
   );
-};
 
-export default withRouter(connect(mapStateToProps)(Menu));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Menu));

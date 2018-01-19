@@ -1,14 +1,12 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Chip from 'material-ui/Chip';
 import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
 import { CardText } from 'material-ui/Card';
 import { orange500, red500 } from 'material-ui/styles/colors';
-import { firebaseAuth } from '../../utils/FirebaseUtil';
 import * as actions from '../../modules/auth';
 import '../../assets/stylesheets/Common.css';
 
@@ -26,10 +24,9 @@ const style = {
   }
 };
 
-const Login = ({ onChangeAuthMode, auth, actions, history }) => {
+const Login = ({ onChangeAuthMode, auth, actions }) => {
   const handleSubmit = e => {
     e.preventDefault();
-    actions.logIn();
 
     const email = this.email.getInputNode().value;
     const password = this.password.getInputNode().value;
@@ -39,14 +36,7 @@ const Login = ({ onChangeAuthMode, auth, actions, history }) => {
       );
       return;
     }
-
-    firebaseAuth
-      .signInWithEmailAndPassword(email, password)
-      .then(user => {
-        actions.logInSuccess({ name: user.displayName });
-        history.push('/');
-      })
-      .catch(error => actions.logInFailure(error));
+    actions.logIn({ email, password });
   };
 
   return (
@@ -106,4 +96,4 @@ const Login = ({ onChangeAuthMode, auth, actions, history }) => {
   );
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login));
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

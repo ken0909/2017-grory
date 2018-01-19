@@ -31,16 +31,6 @@ class InputDistance extends React.Component {
     this.distanceRef.on('value', snapshot =>
       this.props.actions.setDistance({ distance: snapshot.val().distance })
     );
-    firebaseAuth.onAuthStateChanged(user => {
-      if (user) {
-        this.userRef = firebaseDbRef(`user/${user.uid}`);
-        this.userRef.on('value', snapshot =>
-          this.props.actions.setUserDistance({
-            distance: snapshot.val().distance
-          })
-        );
-      }
-    });
   }
 
   handleValidation(e) {
