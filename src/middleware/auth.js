@@ -1,5 +1,5 @@
 import * as auth from "../modules/auth";
-import { firebaseAuth } from "../utils/FirebaseUtil";
+import { firebaseAuth } from "../lib/Firebase";
 import { push } from "react-router-redux";
 
 export default store => next => action => {

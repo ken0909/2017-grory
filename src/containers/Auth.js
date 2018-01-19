@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Login from '../components/Auth/Login';
 import SignIn from '../components/Auth/SignIn';
-import { firebaseAuth } from '../utils/FirebaseUtil';
+import { firebaseAuth } from '../lib/Firebase';
 import * as actions from '../modules/auth';
 
 const mapStateToProps = state => {

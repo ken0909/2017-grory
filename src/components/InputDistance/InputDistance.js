@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
-import { firebaseDbRef, firebaseAuth } from '../../utils/FirebaseUtil';
+import { firebaseDbRef, firebaseAuth } from '../../lib/Firebase';
 import '../../assets/stylesheets/Common.css';
 import * as actions from '../../modules/distance';
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import { Link } from 'react-router-dom';
-import { firebaseDbRef } from '../../utils/FirebaseUtil';
+import { firebaseDbRef } from '../../lib/Firebase';
 import '../../assets/stylesheets/Common.css';
 
 export default class Ranking extends Component {
