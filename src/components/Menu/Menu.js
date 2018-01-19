@@ -1,7 +1,6 @@
 import React from 'react';
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import Chip from 'material-ui/Chip';
 import { CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -32,4 +31,4 @@ const Menu = ({ auth, actions, distance, history }) => (
     </div>
   );
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Menu));
+export default connect(mapStateToProps, mapDispatchToProps)(Menu);
