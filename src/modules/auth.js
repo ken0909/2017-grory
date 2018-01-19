@@ -7,12 +7,12 @@ export const SIGN_IN_FAILURE = 'SIGN_IN_FAILURE';
 export const LOG_IN = 'LOG_IN';
 export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
 export const LOG_IN_FAILURE = 'LOG_IN_FAILURE';
-export const UPDATE_PROFILE = 'UPDATE_PROFILE'
-export const UPDATE_PROFILE_SUCCESS = 'UPDATE_PROFILE_SUCCESS'
-export const UPDATE_PROFILE_FAILURE = 'UPDATE_PROFILE_FAILURE'
-export const LOG_OUT = 'LOG_OUT'
-export const LOG_OUT_SUCCESS = 'LOG_OUT_SUCCESS'
-export const LOAD_LOG_IN_STATE = 'LOAD_LOG_IN_STATE'
+export const UPDATE_PROFILE = 'UPDATE_PROFILE';
+export const UPDATE_PROFILE_SUCCESS = 'UPDATE_PROFILE_SUCCESS';
+export const UPDATE_PROFILE_FAILURE = 'UPDATE_PROFILE_FAILURE';
+export const LOG_OUT = 'LOG_OUT';
+export const LOG_OUT_SUCCESS = 'LOG_OUT_SUCCESS';
+export const LOAD_LOG_IN_STATE = 'LOAD_LOG_IN_STATE';
 
 export const toggleAuth = createAction(TOGGLE_AUTH);
 export const signIn = createAction(SIGN_IN);
@@ -21,12 +21,12 @@ export const signInFailure = createAction(SIGN_IN_FAILURE);
 export const logIn = createAction(LOG_IN);
 export const logInSuccess = createAction(LOG_IN_SUCCESS);
 export const logInFailure = createAction(LOG_IN_FAILURE);
-export const updateProfile = createAction(UPDATE_PROFILE)
-export const updateProfileSuccess = createAction(UPDATE_PROFILE_SUCCESS)
-export const updateProfileFailure = createAction(UPDATE_PROFILE_FAILURE)
-export const logOut = createAction(LOG_OUT)
-export const logOutSuccess = createAction(LOG_OUT_SUCCESS)
-export const loadLogInState = createAction(LOAD_LOG_IN_STATE)
+export const updateProfile = createAction(UPDATE_PROFILE);
+export const updateProfileSuccess = createAction(UPDATE_PROFILE_SUCCESS);
+export const updateProfileFailure = createAction(UPDATE_PROFILE_FAILURE);
+export const logOut = createAction(LOG_OUT);
+export const logOutSuccess = createAction(LOG_OUT_SUCCESS);
+export const loadLogInState = createAction(LOAD_LOG_IN_STATE);
 
 const initialState = {
   logInMode: true,
